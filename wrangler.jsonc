@@ -1,5 +1,5 @@
 {
-  "name": "renovation-checklist",
+  "name": "remodel-decisions",
   "main": "src/index.ts",
   "compatibility_date": "2026-02-02",
   "workers_dev": true,
