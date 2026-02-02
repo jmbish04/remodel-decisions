@@ -1,7 +1,7 @@
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi'
 import { drizzle } from 'drizzle-orm/d1'
-import { items } from '../schema'
-import * as schema from '../schema'
+import { items } from '../db/schema'
+import * as schema from '../db/schema'
 import { eq } from 'drizzle-orm'
 import { 
   ItemSchema, 
@@ -39,6 +39,8 @@ const updateItemStatusRoute = createRoute({
     }
   }
 })
+
+import type { Context } from 'hono';
 
 app.openapi(updateItemStatusRoute, async (c) => {
   const { id } = c.req.valid('param')

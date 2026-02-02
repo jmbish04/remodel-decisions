@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { relations, sql } from "drizzle-orm";
 
 export const areas = sqliteTable("areas", {
@@ -36,13 +36,13 @@ export const systemLogs = sqliteTable("system_logs", {
 });
 
 export const budgetItems = sqliteTable("budget_items", {
-  id: text("id").primaryKey(),
+  id: text("id").primaryKey(), 
   name: text("name").notNull(),
   category: text("category").notNull(),
-  status: text("status").notNull(), // "Ordered" | "Pending" | "Decision Needed" | "Estimating"
-  cost: integer("cost").notNull(), // Using integer for cents or whole dollars? User said "Integer (or Real)". I'll use integer.
-  variance: integer("variance").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(strftime('%s', 'now'))`).notNull(),
+  status: text("status").notNull(), // "Ordered", "Pending", "Decision Needed", "Estimating"
+  cost: real("cost").notNull(),
+  variance: real("variance").default(0),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
 // Define relations (Areas -> Categories -> Items)

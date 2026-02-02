@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/d1";
-import { systemLogs } from "../schema";
+import { systemLogs } from "../db/schema";
 import { type InferInsertModel } from "drizzle-orm";
 
 type LogInsert = InferInsertModel<typeof systemLogs>;

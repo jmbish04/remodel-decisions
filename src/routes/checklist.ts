@@ -1,6 +1,6 @@
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi'
 import { drizzle } from 'drizzle-orm/d1'
-import * as schema from '../schema'
+import * as schema from '../db/schema'
 import { ChecklistResponseSchema } from '../zod'
 
 const app = new OpenAPIHono<{ Bindings: Env }>()
@@ -20,6 +20,8 @@ const getChecklistRoute = createRoute({
     }
   }
 })
+
+import type { Context } from 'hono';
 
 app.openapi(getChecklistRoute, async (c) => {
   const db = drizzle(c.env.DB, { schema })

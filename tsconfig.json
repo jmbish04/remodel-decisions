@@ -1,19 +1,33 @@
 {
   "compilerOptions": {
-    "target": "es2021",
-    "lib": ["es2021"],
-    "module": "es2022",
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "bundler",
-    "types": ["./worker-configuration.d.ts", "node"],
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "checkJs": false,
-    "noEmit": true,
-    "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [
+      "./worker-configuration.d.ts",
+      "node"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["frontend/*"],
+      "$lib/*": ["src/*"]
+    }
   },
-  "include": ["src/**/*", "worker-configuration.d.ts"]
+  "include": [
+    "src/**/*",
+    "frontend/**/*",
+    "worker-configuration.d.ts",
+    ".astro/types.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", ".astro"]
 }
