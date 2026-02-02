@@ -36,15 +36,17 @@
   }
 
   .dark {
-    --background: 218 36% 10%;
+    /* #101622 -> HSL(220, 36%, 10%) */
+    --background: 220 36% 10%;
     --foreground: 210 40% 98%;
 
-    --card: 218 36% 12%;
+    --card: 220 36% 12%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 218 36% 12%;
+    --popover: 220 36% 12%;
     --popover-foreground: 210 40% 98%;
 
+    /* #135bec -> HSL(220, 85%, 50%) */
     --primary: 220 85% 50%;
     --primary-foreground: 210 40% 98%;
 
