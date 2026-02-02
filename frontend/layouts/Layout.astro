@@ -1,0 +1,60 @@
+---
+import "@/styles/globals.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Renovation Budget Tracker" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-background text-foreground font-display min-h-screen flex flex-col antialiased">
+    <!-- Top Navigation -->
+    <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div class="container flex h-16 items-center">
+        <div class="mr-4 flex">
+          <a class="mr-6 flex items-center space-x-2" href="/">
+            <div class="size-8 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-3xl">home_work</span>
+            </div>
+            <span class="hidden font-bold sm:inline-block text-lg">
+              RenoBudget
+            </span>
+          </a>
+          <nav class="flex items-center space-x-6 text-sm font-medium">
+            <a class="transition-colors hover:text-primary text-foreground" href="/">Dashboard</a>
+            <a class="transition-colors hover:text-primary text-muted-foreground" href="#">Projects</a>
+            <a class="transition-colors hover:text-primary text-muted-foreground" href="#">Catalog</a>
+            <a class="transition-colors hover:text-primary text-muted-foreground" href="#">Settings</a>
+          </nav>
+        </div>
+        <div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div class="flex items-center gap-4">
+             <button class="flex items-center justify-center rounded-full size-10 bg-accent hover:bg-accent/80 transition-colors">
+                <span class="material-symbols-outlined text-muted-foreground">notifications</span>
+             </button>
+             <div class="size-10 rounded-full bg-primary/20 border border-primary text-primary flex items-center justify-center text-sm font-bold">
+                JD
+             </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="flex-1 w-full max-w-[1400px] mx-auto p-6 lg:p-10">
+        <slot />
+    </main>
+  </body>
+</html>
