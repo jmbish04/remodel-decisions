@@ -1,15 +1,33 @@
 {
-  "name": "renovate-os",
+  "name": "renovate-os-monolith",
+  "version": "1.0.0",
   "type": "module",
-  "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
+    "dev": "wrangler dev",
+    "deploy": "pnpm run db:generate && pnpm run db:migrate && pnpm run build && wrangler deploy",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:migrate": "wrangler d1 migrations apply DB --remote",
+    "db:seed": "wrangler d1 execute DB --remote --file=init_seed.sql",
+    "db:studio": "drizzle-kit studio",
+    "astro": "astro",
+    "preview": "astro preview"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.25",
+    "@cloudflare/ai-chat": "^0.0.4",
+    "@google/genai": "^1.39.0",
+    "@hono/swagger-ui": "^0.2.1",
+    "@hono/zod-openapi": "^0.9.5",
+    "agents": "^0.3.6",
+    "ai": "^6.0.68",
+    "cloudflare": "^5.2.0",
+    "drizzle-orm": "^0.29.3",
+    "hono": "^4.0.0",
+    "openai": "^6.17.0",
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.25.1",
+    
     "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
@@ -23,5 +41,15 @@
     "recharts": "^3.7.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^3.4.19"
-  }
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260131.0",
+    "@types/node": "^25.2.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "drizzle-kit": "^0.20.14",
+    "typescript": "^5.8.3",
+    "wrangler": "^3.28.1"
+  },
+  "private": true
 }

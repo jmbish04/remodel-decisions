@@ -1,0 +1,51 @@
+{
+  "name": "remodel-decisions",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-02-02",
+  "workers_dev": true,
+  "preview_urls": false,
+  "upload_source_maps": true,
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "remodel-decisions",
+      "database_id": "d85b7bfc-36a7-4a64-bfcb-d305b5cc1b0b",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "ai": {
+    "binding": "AI"
+  },
+  "vars": {
+    "OPENAI_MODEL": "gpt-4o",
+    "AI_GATEWAY_NAME": "ask-cloudflare-mcp",
+    "GEMINI_MODEL": "gemini-2.5-flash"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "OPENAI_AGENT",
+        "class_name": "OpenAIAgent"
+      },
+      {
+        "name": "RESEARCH_AGENT",
+        "class_name": "ResearchAgent"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "OpenAIAgent",
+        "ResearchAgent"
+      ]
+    }
+  ]
+}

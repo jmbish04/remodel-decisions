@@ -1,0 +1,468 @@
+import React, { useState, useEffect, useMemo } from 'react';
+
+// --- ICONS (Inline to avoid external dependency errors) ---
+const IconBase = ({ children, size = 24, className = "" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        {children}
+    </svg>
+);
+
+const Check = (props) => <IconBase {...props}><polyline points="20 6 9 17 4 12"/></IconBase>;
+const ChevronDown = (props) => <IconBase {...props}><path d="m6 9 6 6 6-6"/></IconBase>;
+const ChevronRight = (props) => <IconBase {...props}><path d="m9 18 6-6-6-6"/></IconBase>;
+const RotateCcw = (props) => <IconBase {...props}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/><path d="M3 3v9h9"/></IconBase>;
+const Plus = (props) => <IconBase {...props}><path d="M5 12h14"/><path d="M12 5v14"/></IconBase>;
+const Trash2 = (props) => <IconBase {...props}><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></IconBase>;
+
+const ChefHat = (props) => <IconBase {...props}><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 9.08 0A5.11 5.11 0 0 1 18.59 6 4 4 0 0 1 20 13.87V21H6Z"/><path d="M6 17h14"/></IconBase>;
+const Bath = (props) => <IconBase {...props}><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-1.5C3.5 1 3 1.5 3 2.5V5h18V2.5c0-1-.5-1.5-2.5-2-.5.5-1.5 1-2.5 1.5L15 6H9Z"/><path d="M2 13h20"/><path d="M22 13v6h-2v2h-2v-2H6v2H4v-2H2v-6Z"/></IconBase>;
+const Shirt = (props) => <IconBase {...props}><path d="M20.38 3.4a2 2 0 0 0-2-2h-11a2 2 0 0 0-2 2L5 9a2 2 0 0 0 .5 2.5l7 4 7-4a2 2 0 0 0 .5-2.5Z"/><path d="M9 2v4"/><path d="M15 2v4"/><path d="M12 4v16"/><path d="M12 20h8v-9"/></IconBase>;
+const Sofa = (props) => <IconBase {...props}><path d="M20 9V7a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v2H6V7a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><path d="M4 9v13"/><path d="M20 9v13"/></IconBase>;
+const Flower = (props) => <IconBase {...props}><path d="M12 7.5a4.5 4.5 0 1 1 4.5 4.5M12 7.5A4.5 4.5 0 1 0 7.5 12M12 7.5V9m-4.5 3a4.5 4.5 0 1 1 4.5 4.5M7.5 12H9m3 4.5a4.5 4.5 0 1 1 4.5-4.5M12 16.5V15m4.5-3a4.5 4.5 0 1 0-4.5-4.5M16.5 12H15"/></IconBase>;
+const ArrowUpCircle = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/></IconBase>;
+const BookOpen = (props) => <IconBase {...props}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></IconBase>;
+const LayoutDashboard = (props) => <IconBase {...props}><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></IconBase>;
+
+// --- DATA STRUCTURE BASED ON PDF & USER REQUEST ---
+const INITIAL_DATA = {
+    floor1_general: {
+        title: "1st Floor General",
+        icon: "LayoutDashboard",
+        categories: [
+            {
+                name: "Flooring Decisions",
+                items: [
+                    { id: "f1_1", label: "DECISION: Polished Concrete vs Engineered Hardwood?", note: "Consider durability vs warmth", checked: false },
+                    { id: "f1_2", label: "Subfloor prep required?", note: "Especially if choosing concrete", checked: false },
+                    { id: "f1_3", label: "Baseboard style selection", note: "", checked: false }
+                ]
+            },
+            {
+                name: "Entryway",
+                items: [
+                    { id: "f1_4", label: "Front Door Refinish/Replace", note: "", checked: false },
+                    { id: "f1_5", label: "Entry Lighting (Chandelier/Sconces)", note: "", checked: false },
+                    { id: "f1_6", label: "Coat Closet Organization", note: "", checked: false }
+                ]
+            },
+            {
+                name: "1st Floor Bath",
+                items: [
+                    { id: "f1_7", label: "Vanity Selection", note: "", checked: false },
+                    { id: "f1_8", label: "Shower/Tub Config", note: "", checked: false },
+                    { id: "f1_9", label: "Ventilation Fan", note: "", checked: false }
+                ]
+            }
+        ]
+    },
+    kitchen_living: {
+        title: "Kitchen & Living",
+        icon: "ChefHat",
+        categories: [
+            {
+                name: "Structural (Wall Removal)",
+                items: [
+                    { id: "kl1", label: "Structural Beam Installation", note: "Where wall is being removed", checked: false },
+                    { id: "kl2", label: "Electrical Rerouting", note: "Outlets/switches in removed wall", checked: false },
+                    { id: "kl3", label: "HVAC Vent Relocation", note: "If vents were in the wall", checked: false },
+                    { id: "kl4", label: "Drywall Patching/Texture Match", note: "Ceiling & Walls", checked: false }
+                ]
+            },
+            {
+                name: "Kitchen Config",
+                items: [
+                    { id: "kl5", label: "Island Design (Seating flow to living)", note: "", checked: false },
+                    { id: "kl6", label: "Appliance Layout", note: "", checked: false },
+                    { id: "kl7", label: "Cabinetry Finish", note: "", checked: false }
+                ]
+            },
+            {
+                name: "Living Room",
+                items: [
+                    { id: "kl8", label: "Window Replacement?", note: "", checked: false },
+                    { id: "kl9", label: "Lighting Plan (Open Concept)", note: "Dimmers for different zones", checked: false }
+                ]
+            }
+        ]
+    },
+    exterior: {
+        title: "Exterior & Patio",
+        icon: "Flower",
+        categories: [
+            {
+                name: "Backyard Drainage",
+                items: [
+                    { id: "ex1", label: "French Drain Installation", note: "Map out path", checked: false },
+                    { id: "ex2", label: "Bioswale Design & Plants", note: "Native plants for absorption", checked: false },
+                    { id: "ex3", label: "Grading Check", note: "Slope away from foundation", checked: false }
+                ]
+            },
+            {
+                name: "Patio & Deck",
+                items: [
+                    { id: "ex4", label: "Sliding Glass Door (Living to Patio)", note: "Size specs & header needs", checked: false },
+                    { id: "ex5", label: "Patio Floor Covering", note: "Tile, Pavers, or Concrete?", checked: false },
+                    { id: "ex6", label: "Juliet Deck Engineering (5x25)", note: "Load bearing for new deck", checked: false },
+                    { id: "ex7", label: "Juliet Deck Railing Style", note: "", checked: false },
+                    { id: "ex8", label: "Waterproofing Deck (Roof for Patio)", note: "Crucial for patio below", checked: false }
+                ]
+            }
+        ]
+    },
+    floor2_general: {
+        title: "2nd Floor & Stairs",
+        icon: "ArrowUpCircle",
+        categories: [
+            {
+                name: "Stairs",
+                items: [
+                    { id: "f2_1", label: "Stair Flooring (Match 2nd floor)", note: "", checked: false },
+                    { id: "f2_2", label: "Under-nose Lighting Wiring", note: "Requires routing before tread install", checked: false },
+                    { id: "f2_3", label: "Handrail Update?", note: "", checked: false }
+                ]
+            },
+            {
+                name: "Flooring",
+                items: [
+                    { id: "f2_4", label: "Engineered Hardwood Selection", note: "", checked: false },
+                    { id: "f2_5", label: "Subfloor Squeak Check", note: "Fix before laying new floor", checked: false }
+                ]
+            }
+        ]
+    },
+    family_library: {
+        title: "Family & Library",
+        icon: "BookOpen",
+        categories: [
+            {
+                name: "Family Room",
+                items: [
+                    { id: "fl1", label: "DECISION: Resize Fireplace?", note: "Change framing/opening size", checked: false },
+                    { id: "fl2", label: "DECISION: Convert to Gas Logs?", note: "Run gas line if needed", checked: false },
+                    { id: "fl3", label: "TV Area / AV Wiring", note: "", checked: false }
+                ]
+            },
+            {
+                name: "Library",
+                items: [
+                    { id: "fl4", label: "Built-in Shelving Design", note: "", checked: false },
+                    { id: "fl5", label: "Reading Light Wiring", note: "", checked: false }
+                ]
+            }
+        ]
+    },
+    laundry_new: {
+        title: "New Laundry Room",
+        icon: "RotateCcw",
+        categories: [
+            {
+                name: "Conversion (Old Hall Bath)",
+                items: [
+                    { id: "ln1", label: "Cap old toilet/vanity plumbing", note: "", checked: false },
+                    { id: "ln2", label: "Run 220V for Dryer", note: "", checked: false },
+                    { id: "ln3", label: "Washer Drain Box Installation", note: "", checked: false }
+                ]
+            },
+            {
+                name: "Lightwell Expansion",
+                items: [
+                    { id: "ln4", label: "Structural Framing for Expansion", note: "Into lightwell area", checked: false },
+                    { id: "ln5", label: "Exterior Waterproofing/Siding", note: "Critical for former lightwell", checked: false },
+                    { id: "ln6", label: "Roofing tie-in for expansion", note: "", checked: false },
+                    { id: "ln7", label: "Ventilation Route", note: "Dryer vent path", checked: false }
+                ]
+            }
+        ]
+    },
+    guest_suite: {
+        title: "Guest Bed & Bath",
+        icon: "Sofa",
+        categories: [
+            {
+                name: "Guest Bath (Relocated)",
+                items: [
+                    { id: "gs1", label: "Plumbing Rough-in (New Location)", note: "From back of house", checked: false },
+                    { id: "gs2", label: "Vent Stack Routing", note: "", checked: false },
+                    { id: "gs3", label: "Fixture Selection", note: "", checked: false }
+                ]
+            },
+            {
+                name: "Guest Bedroom / Office",
+                items: [
+                    { id: "gs4", label: "Data/Ethernet drops", note: "For office use", checked: false },
+                    { id: "gs5", label: "Closet config", note: "", checked: false }
+                ]
+            }
+        ]
+    },
+    primary_suite: {
+        title: "Primary Suite",
+        icon: "Bath",
+        categories: [
+            {
+                name: "Primary Closet (Converted Room)",
+                items: [
+                    { id: "ps1", label: "Close up old room entry?", note: "If combining with primary", checked: false },
+                    { id: "ps2", label: "Create opening to Primary Bed", note: "", checked: false },
+                    { id: "ps3", label: "Custom System Design", note: "Island, Hanging, Shelves", checked: false },
+                    { id: "ps4", label: "Lighting Plan", note: "Crucial for windowless closet", checked: false }
+                ]
+            },
+            {
+                name: "Primary Bath",
+                items: [
+                    { id: "ps5", label: "Layout Changes?", note: "", checked: false },
+                    { id: "ps6", label: "Steam Shower?", note: "Requires specific glass/vapor barrier", checked: false },
+                    { id: "ps7", label: "Heated Floors", note: "", checked: false }
+                ]
+            }
+        ]
+    }
+};
+
+const IconMap = {
+    ChefHat, Bath, Shirt, RotateCcw, Sofa, Flower, ArrowUpCircle, BookOpen, LayoutDashboard
+};
+
+export default function App() {
+    const [data, setData] = useState(INITIAL_DATA);
+    const [activeTab, setActiveTab] = useState("floor1_general");
+    const [expandedCategories, setExpandedCategories] = useState({});
+
+    // Load from LocalStorage on mount
+    useEffect(() => {
+        const savedData = localStorage.getItem("renovationChecklistDataV2");
+        if (savedData) {
+            try {
+                const parsed = JSON.parse(savedData);
+                // Simple merge logic: if keys exist in saved, use them, else use initial
+                // This preserves new structure while keeping old checks if keys match
+                setData(prev => ({...prev, ...parsed}));
+            } catch (e) {
+                console.error("Failed to load save", e);
+            }
+        }
+    }, []);
+
+    // Save to LocalStorage whenever data changes
+    useEffect(() => {
+        localStorage.setItem("renovationChecklistDataV2", JSON.stringify(data));
+    }, [data]);
+
+    const toggleCategory = (catName) => {
+        setExpandedCategories(prev => ({
+            ...prev,
+            [catName]: !prev[catName]
+        }));
+    };
+
+    const toggleItem = (roomKey, catIndex, itemIndex) => {
+        const newData = { ...data };
+        const item = newData[roomKey].categories[catIndex].items[itemIndex];
+        item.checked = !item.checked;
+        setData(newData);
+    };
+
+    const updateNote = (roomKey, catIndex, itemIndex, newNote) => {
+        const newData = { ...data };
+        newData[roomKey].categories[catIndex].items[itemIndex].note = newNote;
+        setData(newData);
+    };
+
+    const addItem = (roomKey, catIndex) => {
+        const text = prompt("Enter new item name:");
+        if (text) {
+            const newData = { ...data };
+            newData[roomKey].categories[catIndex].items.push({
+                id: Date.now().toString(),
+                label: text,
+                note: "",
+                checked: false
+            });
+            setData(newData);
+        }
+    };
+
+    const deleteItem = (roomKey, catIndex, itemIndex) => {
+            if(confirm("Delete this item?")) {
+            const newData = { ...data };
+            newData[roomKey].categories[catIndex].items.splice(itemIndex, 1);
+            setData(newData);
+            }
+    };
+
+    const resetData = () => {
+        if (confirm("This will erase all your progress. Are you sure?")) {
+            setData(INITIAL_DATA);
+            localStorage.removeItem("renovationChecklistDataV2");
+        }
+    };
+
+    // Calculate Progress
+    const progress = useMemo(() => {
+        let total = 0;
+        let checked = 0;
+        Object.values(data).forEach(room => {
+            room.categories.forEach(cat => {
+                cat.items.forEach(item => {
+                    total++;
+                    if (item.checked) checked++;
+                });
+            });
+        });
+        return total === 0 ? 0 : Math.round((checked / total) * 100);
+    }, [data]);
+
+    const ActiveIcon = IconMap[data[activeTab].icon] || LayoutDashboard;
+
+    return (
+        <div className="min-h-screen bg-slate-50 font-sans pb-20 md:pb-0 md:flex">
+            
+            {/* Mobile/Tablet Header */}
+            <div className="md:hidden bg-white p-4 shadow-sm sticky top-0 z-10">
+                <div className="flex justify-between items-center mb-2">
+                    <h1 className="font-bold text-xl text-slate-800">Reno Checklist</h1>
+                    <div className="text-sm font-semibold text-blue-600">{progress}% Done</div>
+                </div>
+                <div className="w-full bg-slate-200 rounded-full h-2.5">
+                    <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
+                </div>
+            </div>
+
+            {/* Sidebar (Desktop) / Bottom Nav (Mobile) */}
+            <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 md:static md:w-64 md:h-screen md:border-r md:border-t-0 md:flex md:flex-col flex z-20">
+                <div className="hidden md:block p-6">
+                    <h1 className="font-bold text-2xl text-slate-800 mb-1">Renovation</h1>
+                    <p className="text-slate-500 text-sm mb-4">Project Master Plan</p>
+                    <div className="w-full bg-slate-200 rounded-full h-2.5 mb-2">
+                        <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>
+                    </div>
+                    <p className="text-xs text-slate-500 text-right">{progress}% Complete</p>
+                </div>
+                
+                <div className="flex md:flex-col overflow-x-auto md:overflow-visible hide-scrollbar flex-1">
+                    {Object.entries(data).map(([key, room]) => {
+                        const Icon = IconMap[room.icon] || LayoutDashboard;
+                        const isActive = activeTab === key;
+                        return (
+                            <button
+                                key={key}
+                                onClick={() => setActiveTab(key)}
+                                className={`flex flex-col md:flex-row items-center md:px-6 md:py-4 p-3 min-w-[80px] md:w-full transition-colors ${
+                                    isActive 
+                                    ? "text-blue-600 md:bg-blue-50 md:border-r-4 md:border-blue-600" 
+                                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                                }`}
+                            >
+                                <Icon size={24} className="mb-1 md:mb-0 md:mr-3" />
+                                <span className="text-xs md:text-sm font-medium whitespace-nowrap">{room.title}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                    <div className="hidden md:block p-6 border-t border-slate-200">
+                        <button onClick={resetData} className="flex items-center text-slate-400 hover:text-red-500 text-sm">
+                        <RotateCcw size={16} className="mr-2" /> Reset All
+                        </button>
+                </div>
+            </nav>
+
+            {/* Main Content */}
+            <main className="flex-1 p-4 md:p-8 md:overflow-y-auto h-auto md:h-screen">
+                <header className="mb-6 flex items-center justify-between">
+                    <div className="flex items-center">
+                        <div className="p-3 bg-blue-100 text-blue-600 rounded-lg mr-4 hidden md:block">
+                            <ActiveIcon size={32} />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-slate-800">{data[activeTab].title}</h2>
+                            <p className="text-slate-500">Review specifications and configurations</p>
+                        </div>
+                    </div>
+                    <button onClick={resetData} className="md:hidden text-slate-400 p-2">
+                        <RotateCcw size={20} />
+                    </button>
+                </header>
+
+                <div className="space-y-6">
+                    {data[activeTab].categories.map((category, catIndex) => {
+                        const isExpanded = expandedCategories[`${activeTab}-${catIndex}`] !== false; // Default open
+                        
+                        // Calc category progress
+                        const catTotal = category.items.length;
+                        const catChecked = category.items.filter(i => i.checked).length;
+                        const catProgress = catTotal === 0 ? 0 : (catChecked / catTotal) * 100;
+
+                        return (
+                            <div key={catIndex} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                                <button 
+                                    onClick={() => toggleCategory(`${activeTab}-${catIndex}`)}
+                                    className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 transition-colors"
+                                >
+                                    <div className="flex items-center space-x-3">
+                                        {isExpanded ? <ChevronDown size={20} className="text-slate-400"/> : <ChevronRight size={20} className="text-slate-400"/>}
+                                        <h3 className="font-semibold text-slate-700">{category.name}</h3>
+                                    </div>
+                                    <div className="flex items-center space-x-3">
+                                        <span className="text-xs font-mono text-slate-400">{catChecked}/{catTotal}</span>
+                                        <div className="w-16 bg-slate-200 rounded-full h-1.5">
+                                            <div className={`h-1.5 rounded-full ${catProgress === 100 ? 'bg-green-500' : 'bg-blue-500'}`} style={{ width: `${catProgress}%` }}></div>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                {isExpanded && (
+                                    <div className="p-4 space-y-3">
+                                        {category.items.map((item, itemIndex) => (
+                                            <div key={item.id} className={`group flex items-start space-x-3 p-3 rounded-lg transition-all ${item.checked ? 'bg-slate-50 opacity-75' : 'hover:bg-slate-50'}`}>
+                                                <button 
+                                                    onClick={() => toggleItem(activeTab, catIndex, itemIndex)}
+                                                    className={`mt-1 flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                                                        item.checked 
+                                                        ? 'bg-blue-600 border-blue-600 text-white' 
+                                                        : 'border-slate-300 hover:border-blue-400 bg-white'
+                                                    }`}
+                                                >
+                                                    {item.checked && <Check size={14} strokeWidth={3} />}
+                                                </button>
+                                                
+                                                <div className="flex-1">
+                                                    <div className="flex justify-between items-start">
+                                                        <span 
+                                                            onClick={() => toggleItem(activeTab, catIndex, itemIndex)}
+                                                            className={`cursor-pointer font-medium select-none ${item.checked ? 'text-slate-500 line-through decoration-slate-400' : 'text-slate-800'}`}
+                                                        >
+                                                            {item.label}
+                                                        </span>
+                                                        <button onClick={() => deleteItem(activeTab, catIndex, itemIndex)} className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-500 transition-opacity">
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="Add notes (e.g., model #, color)..." 
+                                                        value={item.note}
+                                                        onChange={(e) => updateNote(activeTab, catIndex, itemIndex, e.target.value)}
+                                                        className="mt-1 w-full bg-transparent text-sm text-slate-600 placeholder-slate-300 focus:outline-none border-b border-transparent focus:border-blue-300 transition-colors"
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <button 
+                                            onClick={() => addItem(activeTab, catIndex)}
+                                            className="w-full py-2 flex items-center justify-center text-sm text-slate-400 hover:text-blue-600 hover:bg-slate-50 rounded-lg border border-dashed border-slate-200 mt-2 transition-colors"
+                                        >
+                                            <Plus size={16} className="mr-2"/> Add Custom Item
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="h-16 md:hidden"></div> {/* Spacer for mobile nav */}
+            </main>
+        </div>
+    );
+}

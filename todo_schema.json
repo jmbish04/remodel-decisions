@@ -1,0 +1,71 @@
+{
+  "kitchen": {
+    "title": "Kitchen & Culinary Hub",
+    "icon": <Layout className="w-5 h-5" />,
+    "desc": "Reconfiguring the core for an open-concept flow. Requires plumbing stack relocation and electrical home-runs.",
+    "options": [
+      {
+        "id": "kitchen-layout",
+        "label": "Layout & Spatial Flow",
+        "type": "radio",
+        "items": [
+          { "id": "original_footprint", "name": "Preserve Footprint", "price": 0, "desc": "Keep existing plumbing/gas lines. Limits island size." },
+          { "id": "open_concept_island", "name": "Open Concept + Island", "price": 12500, "desc": "Relocates waste lines and gas. Enables 9ft waterfall island." }
+        ]
+      },
+      {
+        "id": "appliance-style",
+        "label": "Appliance Integration",
+        "type": "radio",
+        "items": [
+          { "id": "pro_stainless", "name": "Pro-Style Stainless", "price": 18000, "desc": "High-end exposed steel look (Wolf/Sub-Zero style)." },
+          { "id": "panel_ready_mcm", "name": "Fully Integrated (MCM)", "price": 24500, "desc": "Custom walnut panels for fridge/dishwasher to match cabinetry for a seamless look." }
+        ]
+      }
+    ],
+    "checklist": ["Gas line pressure test", "Dedicated 20A circuits for island", "Undercabinet LED channel integration", "Vent-hood external ducting"]
+  },
+  "exterior": {
+    "title": "Exterior & Drainage",
+    "icon": <Droplets className="w-5 h-5" />,
+    "desc": "Addressing B2R critical findings: Correcting reverse slopes and perimeter water intrusion.",
+    "options": [
+      {
+        "id": "drainage-system",
+        "label": "Water Mitigation",
+        "type": "checkbox",
+        "items": [
+          { "id": "b2r_subdrain", "name": "B2R Spec Subdrain", "price": 9500, "desc": "4-inch perforated pipe + drain rock at rear right corner." },
+          { "id": "retaining_wall_tie_in", "name": "Retaining Wall Drainage", "price": 4200, "desc": "Tie rear walls into main area drain with upsized piping." }
+        ]
+      },
+      {
+        "id": "roof-correction",
+        "label": "Roofing Geometry",
+        "type": "radio",
+        "items": [
+          { "id": "ponding_fix", "name": "Slope Correction (Tapered)", "price": 15500, "desc": "Eliminate 'ponding' areas identified in B2R report using tapered insulation." },
+          { "id": "standard_overlay", "name": "Standard Torch-Down", "price": 8000, "desc": "Basic replacement; does not solve standing water issues." }
+        ]
+      }
+    ],
+    "checklist": ["Grade elevation check (L1 Interior vs Backyard)", "Roof drain dome strainer install", "APOC 243 coating removal", "Siding weather barrier verification"]
+  },
+  "bathrooms": {
+    "title": "Bathrooms & Utility",
+    "icon": <ShieldAlert className="w-5 h-5" />,
+    "desc": "Remediating moisture damage and modernizing the L1/L2 wet stacks.",
+    "options": [
+      {
+        "id": "shower-tech",
+        "label": "Waterproofing System",
+        "type": "radio",
+        "items": [
+          { "id": "traditional_pan", "name": "Standard Hot-Mop", "price": 3500, "desc": "Traditional SF builder method." },
+          { "id": "schluter_kerdi", "name": "Schluter/Kerdi System", "price": 5800, "desc": "Full vapor-tight membrane. Essential for long-term bio-defense." }
+        ]
+      }
+    ],
+    "checklist": ["L1 Toilet waste-leak repair", "New exhaust fan ductwork", "Nail plate protection for plumbing", "Anti-scald valve calibration"]
+  }
+}

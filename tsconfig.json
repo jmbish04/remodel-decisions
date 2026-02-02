@@ -1,13 +1,33 @@
 {
-  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "strict": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [
+      "./worker-configuration.d.ts",
+      "node"
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": ["frontend/*"],
       "$lib/*": ["src/*"]
-    },
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
-  }
+    }
+  },
+  "include": [
+    "src/**/*",
+    "frontend/**/*",
+    "worker-configuration.d.ts",
+    ".astro/types.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", ".astro"]
 }

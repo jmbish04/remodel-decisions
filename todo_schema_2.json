@@ -1,0 +1,198 @@
+{
+  "foundation_and_bio_defense": {
+    "slab-infra": [
+      {
+        "id": "trench_kitchen",
+        "name": "Plumbing Trenching",
+        "price": 9500,
+        "desc": "Mandatory for moving kitchen and aligning bath stack."
+      },
+      {
+        "id": "internal_french_drains",
+        "name": "Internal French Drains",
+        "price": 18000,
+        "desc": "Trenches along side walls to capture ground seep before it hits framing."
+      },
+      {
+        "id": "vapor_barrier_topical",
+        "name": "Topical Vapor Barrier",
+        "price": 6500,
+        "desc": "High-grade epoxy seal applied to top of concrete before polishing."
+      },
+      {
+        "id": "vapor_barrier_epoxy",
+        "name": "Epoxy Vapor Seal",
+        "price": 7500,
+        "desc": "High-performance topical barrier required for 96% RH slab."
+      }
+    ],
+    "backyard": [
+      {
+        "id": "sump_battery",
+        "name": "Sump + Battery Backup",
+        "price": 4500,
+        "desc": "Protects downstairs volume during SF power outages."
+      },
+      {
+        "id": "bioswale_regrade",
+        "name": "Bioswale & Soil Removal",
+        "price": 14000,
+        "desc": "Corrects backyard slope to prevent water running under patio."
+      }
+    ],
+    "pest-defense": [
+      {
+        "id": "boracare_structural",
+        "name": "Structural Bora-Care",
+        "price": 5500,
+        "desc": "Treats exposed studs after flipper drywall is removed."
+      },
+      {
+        "id": "soil_injection",
+        "name": "Soil Termiticide Injection",
+        "price": 3000,
+        "desc": "Direct treatment of soil beneath the guest bedroom corner."
+      }
+    ]
+  },
+  "systems_electrical_hvac": {
+    "electrical": [
+      {
+        "id": "partial",
+        "name": "Fix Faulty Circuits",
+        "price": 9000,
+        "desc": "Repairing flipper shortcuts."
+      },
+      {
+        "id": "rewire_200a",
+        "name": "Full Rewire & 200A Panel",
+        "price": 28000,
+        "desc": "Complete replacement of flipper/East Star electrical."
+      }
+    ],
+    "hvac": [
+      {
+        "id": "asbestos_abatement",
+        "name": "Certified Abatement",
+        "price": 11000,
+        "desc": "Containment removal of asbestos ducts and 20yr old furnace."
+      }
+    ],
+    "hvac-abatement": [
+      {
+        "id": "targeted_tape_removal",
+        "name": "Targeted Tape Abatement",
+        "price": 4200,
+        "desc": "Safe removal of asbestos-taped ducts. Negative air in specific zone."
+      },
+      {
+        "id": "full_abatement",
+        "name": "Full Hazardous Abatement",
+        "price": 9500,
+        "desc": "Full containment bubble for whole-system disposal."
+      }
+    ]
+  },
+  "structural_architecture": {
+    "kitchen-volume": [
+      {
+        "id": "partial_header",
+        "name": "Partial Opening",
+        "price": 8000,
+        "desc": "Dropped header with curved drywall."
+      },
+      {
+        "id": "full_opening",
+        "name": "9FT Full Open (Steel)",
+        "price": 21000,
+        "desc": "Structural steel preserves garage and creates clear span."
+      }
+    ],
+    "structural-beam": [
+      {
+        "id": "wood_lvl",
+        "name": "Reinforced Wood (LVL)",
+        "price": 8500,
+        "desc": "Lower material cost. 14-16\" depth. May be slightly visible below 9ft plane."
+      },
+      {
+        "id": "steel_flush",
+        "name": "Flush Steel I-Beam",
+        "price": 16500,
+        "desc": "Higher material/crane cost. Low profile (8-10\"). Tucks completely into joists for seamless 9ft ceiling."
+      }
+    ],
+    "kitchen-loc": [
+      {
+        "id": "inkind",
+        "name": "In-Kind / Upstairs",
+        "price": 0,
+        "desc": "Keep existing layout (requires garage structural posts)."
+      },
+      {
+        "id": "downstairs_9ft",
+        "name": "Move Downstairs (9FT)",
+        "price": 12000,
+        "desc": "Best ROI. Eliminates grocery climb and leverages open slab."
+      }
+    ]
+  },
+  "interiors_and_finishes": {
+    "upstairs-wall": [
+      {
+        "id": "standard",
+        "name": "Standard Drywall",
+        "price": 0,
+        "desc": "Keep existing openings."
+      },
+      {
+        "id": "library_glass",
+        "name": "Iron & Glass Doors",
+        "price": 16500,
+        "desc": "Preserves light and Guest Bed legality for resale."
+      }
+    ],
+    "fireplace": [
+      {
+        "id": "do_nothing",
+        "name": "Leave As-Is",
+        "price": 0,
+        "desc": "No budget impact."
+      },
+      {
+        "id": "gas_log",
+        "name": "Gas Log Conversion",
+        "price": 3200,
+        "desc": "Leverages gas line proximity in garage ceiling."
+      }
+    ],
+    "flooring-l1": [
+      {
+        "id": "hardwood",
+        "name": "Engineered Hardwood",
+        "price": 21000,
+        "desc": "Requires full moisture barrier."
+      },
+      {
+        "id": "hardwood_l1",
+        "name": "Engineered Hardwood (L1)",
+        "price": 22000,
+        "desc": "Calculated at ~$26/sqft (includes mandatory moisture epoxy barrier)."
+      },
+      {
+        "id": "polished_concrete",
+        "name": "Polished Concrete",
+        "price": 14500,
+        "desc": "Calculated at ~$17/sqft for 850 sqft. Breathable and flood-proof. (Note: Previous quote was $19,000)"
+      }
+    ],
+    "flooring-l2": [
+      {
+        "id": "hardwood_l2_stairs",
+        "name": "Hardwood Suite + Stairs",
+        "price": 28500,
+        "desc": "~1100 sqft L2 ($18k) + 16 hardwood stair caps/nosing ($10.5k)."
+      }
+    ]
+  }
+}
